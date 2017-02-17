@@ -250,7 +250,7 @@ __myevic__ void GetUserInput()
 
 		if ( gFlags.usb_attached )
 		{
-			if ( ISVTCDUAL )
+			if ( ISVTCDUAL || ISVTCPRIMO )
 			{
 				if ( NumBatteries == 1 )
 				{

@@ -165,7 +165,7 @@ __myevic__ void EventHandler()
 	if ( Event == 0 )
 		return;
 
-//	myprintf( "Event = %d\n", Event );
+	myprintf( "Event = %d\n", Event );
 
 	NoEventTimer = 200;
 	LastEvent = Event;
@@ -540,7 +540,7 @@ __myevic__ void EventHandler()
 
 //------------------------------------------------------------------------------
 
-			if ( ISVTCDUAL )
+			if ( ISVTCDUAL || ISVTCPRIMO )
 			{
 				GPIO_SetMode( PD, GPIO_PIN_PIN1_Msk, GPIO_MODE_OUTPUT );
 				PD1 = 0;
@@ -942,7 +942,7 @@ __myevic__ void EventHandler()
 			return;
 
 		case 11:	// USB cable detach
-			if ( ISVTCDUAL )
+			if ( ISVTCDUAL || ISVTCPRIMO )
 			{
 				PF2 = 0;
 				PA2 = 0;

@@ -141,7 +141,7 @@ __myevic__ void InitPWM()
 	BuckDuty = 0;
 	PWM_SET_CMR( PWM0, BBC_PWMCH_BUCK, 0 );
 
-	if ( ISVTCDUAL || ISCUBOID || ISCUBO200 || ISRX200S || ISRX23 || ISRX300 )
+	if ( ISVTCDUAL || ISVTCPRIMO || ISCUBOID || ISCUBO200 || ISRX200S || ISRX23 || ISRX300 )
 	{
 		PWM_ConfigOutputChannel( PWM0, BBC_PWMCH_CHARGER, BBC_PWM_FREQ, 0 );
 		PWM_EnableOutput( PWM0, 1 << BBC_PWMCH_CHARGER );
@@ -150,7 +150,7 @@ __myevic__ void InitPWM()
 		ChargerDuty = 0;
 		PWM_SET_CMR( PWM0, BBC_PWMCH_CHARGER, 0 );
 
-		if ( ISCUBO200 || ISRX200S || ISRX23 || ISRX300 )
+		if ( ISVTCPRIMO || ISCUBO200 || ISRX200S || ISRX23 || ISRX300 )
 		{
 			MaxChargerDuty = 512;
 		}
@@ -297,16 +297,16 @@ __myevic__ uint16_t FarenheitToC( uint16_t tf )
 __myevic__ void StopFire()
 {
 
-//	register const uint32_t lr __asm__("lr");
-//	uint32_t caller;
+	//register const uint32_t lr __asm__("lr");
+	//uint32_t caller;
 
-//	caller = lr;
+	//caller = lr;
 
 	if ( ISVTCDUAL )
 	{
 		GPIO_SetMode( PD, GPIO_PIN_PIN1_Msk, GPIO_MODE_INPUT );
 	}
-	else if ( !ISCUBOID && !ISCUBO200 && !ISRX200S && !ISRX23 && !ISRX300 )
+	else if ( ISCUBOID && !ISCUBO200 && !ISRX200S && !ISRX23 && !ISRX300 )
 	{
 		GPIO_SetMode( PD, GPIO_PIN_PIN7_Msk, GPIO_MODE_INPUT );
 	}
@@ -355,7 +355,7 @@ __myevic__ void StopFire()
 		}
 	}
 
-//	myprintf( "StopFire from 0x%08x\n", caller );
+	//myprintf( "StopFire from 0x%08x\n", caller );
 
 	AutoPuffTimer = 0;
 	PreheatTimer = 0;
@@ -1369,7 +1369,7 @@ __myevic__ void ProbeAtomizer()
 	||  ( ( ISCUBOID || ISCUBO200 || ISRX200S || ISRX23 || ISRX300 ) && ( BatteryStatus == 2 || !PF0 ) ))
 	{
 		AtoStatus = 0;
-//		myprintf( "Can't Probe: BS=%d PF0=%d\n", BatteryStatus, PF0 );
+		myprintf( "Can't Probe: BS=%d PF0=%d\n", BatteryStatus, PF0 );
 	}
 	else
 	{
@@ -1446,7 +1446,7 @@ __myevic__ void ProbeAtomizer()
 			break;
 	}
 
-//	myprintf( "Probe: %2d. ARM=%d AS=%d\n", AtoProbeCount, AtoRezMilli, AtoStatus );
+	myprintf( "Probe: %2d. ARM=%d AS=%d\n", AtoProbeCount, AtoRezMilli, AtoStatus );
 
 	if ( AtoProbeCount < 12 )
 	{

@@ -50,6 +50,7 @@ const char pid_presa75w	[8]	__PIDATTR__	= { 'W','0','0','7', 1, 0, 3, 0 };
 const char pid_presa100w[8]	__PIDATTR__	= { 'W','0','1','7', 1, 0, 0, 0 };
 const char pid_wrx75tc	[8]	__PIDATTR__	= { 'W','0','2','6', 1, 0, 3, 0 };
 const char pid_vtcdual	[8]	__PIDATTR__	= { 'E','0','7','9', 1, 0, 1, 0 };
+const char pid_vtcprimo	[8]	__PIDATTR__	= { 'E','1','8','2', 1, 0, 1, 0 };
 const char pid_cuboid	[8]	__PIDATTR__	= { 'E','0','6','0', 1, 0, 2, 0 };
 const char pid_cubo200	[8]	__PIDATTR__	= { 'E','1','6','6', 1, 0, 0, 0 };
 const char pid_rx200s	[8]	__PIDATTR__	= { 'W','0','3','3', 1, 0, 0, 0 };
@@ -75,6 +76,7 @@ const char pid_lpb		[8]	__PIDATTR__	= { 'W','0','4','3', 1, 0, 0, 0 };
 #define PID_PRESA100W	MAKEPID(pid_presa100w)
 #define PID_WRX75TC		MAKEPID(pid_wrx75tc)
 #define PID_VTCDUAL		MAKEPID(pid_vtcdual)
+#define PID_VTCPRIMO	MAKEPID(pid_vtcprimo)
 #define PID_CUBOID		MAKEPID(pid_cuboid)
 #define PID_CUBO200		MAKEPID(pid_cubo200)
 #define PID_RX200S		MAKEPID(pid_rx200s)
@@ -94,6 +96,7 @@ const char pid_lpb		[8]	__PIDATTR__	= { 'W','0','4','3', 1, 0, 0, 0 };
 #define HWV_PRESA100W	MAKEHWV(pid_presa100w)
 #define HWV_WRX75TC		MAKEHWV(pid_wrx75tc)
 #define HWV_VTCDUAL		MAKEHWV(pid_vtcdual)
+#define HWV_VTCPRIMO	MAKEHWV(pid_vtcprimo)
 #define HWV_CUBOID		MAKEHWV(pid_cuboid)
 #define HWV_CUBO200		MAKEHWV(pid_cubo200)
 #define HWV_RX200S		MAKEHWV(pid_rx200s)
@@ -169,6 +172,17 @@ __myevic__ void SetProductID()
 			BoxModel = BOX_VTCDUAL;
 			NumBatteries = 0;
 			MaxBatteries = 2;
+			gFlags.pwm_pll = 1;
+			break;
+		}
+		else if ( u32Data == PID_VTCPRIMO )
+		{
+			dfMaxHWVersion = HWV_VTCPRIMO;
+			DFMagicNumber = 0x12;
+			BoxModel = BOX_VTCPRIMO;
+			NumBatteries = 2;
+			MaxBatteries = 2;
+			MaxCurrent = 50;
 			gFlags.pwm_pll = 1;
 			break;
 		}
@@ -1061,6 +1075,10 @@ __myevic__ void InitDataFlash()
 		MaxPower = 1500;
 		gFlags.batt_unk = 1;
 	}
+	else if ( ISVTCPRIMO )
+	{
+		MaxPower = 2000;
+	}
 	else if ( ISCUBOID || ISCUBO200 )
 	{
 		MaxPower = 2000;
@@ -1268,6 +1286,10 @@ __myevic__ uint16_t GetShuntRezValue()
 				rez = 105;
 				break;
 		}
+	}
+	else if ( ISVTCPRIMO )
+	{
+		rez = 105;
 	}
 	else if ( ISRX23 )
 	{
